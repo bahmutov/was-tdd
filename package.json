@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/bahmutov/was-tdd#readme",
   "dependencies": {
+    "arg": "4.1.0",
     "ggit": "2.4.11",
     "shelljs": "0.8.3",
     "terminal-banner": "1.1.0"

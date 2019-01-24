@@ -2,6 +2,7 @@
 
 // @ts-check
 
+const arg = require('arg')
 const {
   findChangedFiles,
   toBranch,
@@ -21,12 +22,28 @@ if (!shell.which('git')) {
   shell.exit(1)
 }
 
-// branches:
-//  - fix-add really followed TDD
-//  - just-code-fix only updated the source code without writing a failing test first
-const currentBranch = 'fix-add'
-// const currentBranch = 'just-code-fix'
-const againstBranch = 'master'
+const args = arg({
+  '--branch': String,
+  '--against': String,
+
+  // aliases
+  '-b': '--branch',
+  '-a': '--against',
+  '--current': '--branch',
+  '--parent': '--against'
+})
+
+const currentBranch = args['--branch']
+const againstBranch = args['--against']
+
+if (!currentBranch) {
+  console.error('⚠️ missing branch to check, use --branch <name> argument')
+  process.exit(1)
+}
+if (!againstBranch) {
+  console.error('⚠️ missing parent branch, use --against <name> argument')
+  process.exit(1)
+}
 
 banner('Finding changed files')
 const { allChangedFiles, specChangedFiles } = findChangedFiles(
