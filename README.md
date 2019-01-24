@@ -37,6 +37,10 @@ This little CLI utility does a few steps
 
 If these steps complete - then the fix was written using TDD practice.
 
+## Warning
+
+The tests could break for other reasons of course - like the code and the tests were refactored. You still need a human to understand what the change was. But this tool at least gives you some initial sense.
+
 ### Small print
 
 Author: Gleb Bahmutov &lt;gleb.bahmutov@gmail.com&gt; &copy; 2019
