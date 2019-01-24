@@ -19,23 +19,24 @@ const parseChangedFiles = diffOutput => {
 }
 
 const findChangedFiles = (branch, againstBranch) => {
-  toBranch(branch)
+  // toBranch(branch)
 
-  const cmd = `git diff --name-status --diff-filter=ACMD ${againstBranch}`
+  const cmd = `git diff --name-status --diff-filter=ACMD ${branch}..${againstBranch}`
   const changedFilesExec = shell.exec(cmd, { silent: true }).stdout
-  console.log('changed files')
-  console.log(changedFilesExec)
+
+  // console.log('changed files')
+  // console.log(changedFilesExec)
 
   const parsedFiles = parseChangedFiles(changedFilesExec)
-  console.log('all changes files\n%s', parsedFiles.join('\n'))
+  // console.log('all changes files\n%s', parsedFiles.join('\n'))
 
   // todo: use simpler minimatch, probably pass from CLI
   const specFileRegex = /spec/
   const isSpecFilename = filename => specFileRegex.test(filename)
   const specFiles = parsedFiles.filter(isSpecFilename)
-  console.log('changed spec files\n%s', specFiles.join('\n'))
+  // console.log('changed spec files\n%s', specFiles.join('\n'))
 
-  toPreviousBranch()
+  // toPreviousBranch()
 
   return {
     allChangedFiles: parsedFiles,

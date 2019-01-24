@@ -34,4 +34,7 @@ if (!againstBranch) {
   process.exit(1)
 }
 
-wasTdd({ currentBranch, againstBranch })
+wasTdd({ currentBranch, againstBranch }).catch(err => {
+  console.error(err.message)
+  process.exit(1)
+})
