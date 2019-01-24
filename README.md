@@ -75,10 +75,10 @@ WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE.
 
-[npm-icon]: https://nodei.co/npm/was-only.svg?downloads=true
-[npm-url]: https://npmjs.org/package/was-only
-[ci-image]: https://travis-ci.org/bahmutov/was-only.svg?branch=master
-[ci-url]: https://travis-ci.org/bahmutov/was-only
+[npm-icon]: https://nodei.co/npm/was-tdd.svg?downloads=true
+[npm-url]: https://npmjs.org/package/was-tdd
+[ci-image]: https://travis-ci.org/bahmutov/was-tdd.svg?branch=master
+[ci-url]: https://travis-ci.org/bahmutov/was-tdd
 [semantic-image]: https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg
 [semantic-url]: https://github.com/semantic-release/semantic-release
 [renovate-badge]: https://img.shields.io/badge/renovate-app-blue.svg
