@@ -8,7 +8,8 @@ const {
   gitStatus,
   makeBranch,
   checkoutFiles,
-  runTests
+  runTests,
+  gitResetHard
 } = require('../src/utils')
 const banner = require('terminal-banner').terminalBanner
 const shell = require('shelljs')
@@ -26,8 +27,6 @@ if (!shell.which('git')) {
 const currentBranch = 'fix-add'
 // const currentBranch = 'just-code-fix'
 const againstBranch = 'master'
-
-const gitResetHard = () => shell.exec('git reset --hard', { silent: true })
 
 banner('Finding changed files')
 const { allChangedFiles, specChangedFiles } = findChangedFiles(

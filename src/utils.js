@@ -71,6 +71,8 @@ const runTests = (fromBranch, againstBranch, shouldFail) => {
   }
 }
 
+const gitResetHard = () => shell.exec('git reset --hard', { silent: true })
+
 module.exports = {
   findChangedFiles,
   gitStatus,
@@ -78,5 +80,6 @@ module.exports = {
   toPreviousBranch,
   makeBranch,
   checkoutFiles,
-  runTests
+  runTests,
+  gitResetHard
 }
