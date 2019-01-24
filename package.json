@@ -1,0 +1,31 @@
+{
+  "name": "was-tdd",
+  "version": "1.0.0",
+  "description": "Checks a branch that claims to fix a bug using TDD principle",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bahmutov/was-tdd.git"
+  },
+  "keywords": [
+    "test",
+    "tdd",
+    "cli"
+  ],
+  "author": "Gleb Bahmutov <gleb.bahmutov@gmail.com> (https://glebbahmutov.com/)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bahmutov/was-tdd/issues"
+  },
+  "homepage": "https://github.com/bahmutov/was-tdd#readme",
+  "dependencies": {
+    "ggit": "2.4.11",
+    "shelljs": "0.8.3"
+  },
+  "bin": {
+    "was-tdd": "bin/cli.js"
+  }
+}
