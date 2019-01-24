@@ -2,6 +2,15 @@
 
 // @ts-check
 
+const {
+  findChangedFiles,
+  toBranch,
+  gitStatus,
+  makeBranch,
+  checkoutFiles,
+  runTests
+} = require('../src/utils')
+const banner = require('terminal-banner').terminalBanner
 const shell = require('shelljs')
 // exit with error on any error
 shell.config.fatal = true
@@ -11,94 +20,40 @@ if (!shell.which('git')) {
   shell.exit(1)
 }
 
+// branches:
+//  - fix-add really followed TDD
+//  - just-code-fix only updated the source code without writing a failing test first
 const currentBranch = 'fix-add'
+// const currentBranch = 'just-code-fix'
 const againstBranch = 'master'
-
-const gitStatus = () => shell.exec('git status')
-const toBranch = name => shell.exec(`git checkout ${name}`)
-const toPreviousBranch = () => shell.exec(`git checkout -`)
-
-const findChangedFiles = (branch, againstBranch) => {
-  toBranch(branch)
-
-  const cmd = `git diff --name-status --diff-filter=ACMD ${againstBranch}`
-  const changedFilesExec = shell.exec(cmd, { silent: true }).stdout
-  console.log('changed files')
-  console.log(changedFilesExec)
-
-  const parsedFiles = parseChangedFiles(changedFilesExec)
-  console.log('all changes files\n%s', parsedFiles.join('\n'))
-
-  // todo: use simpler minimatch
-  const specFileRegex = /spec/
-  const isSpecFilename = filename => specFileRegex.test(filename)
-  const specFiles = parsedFiles.filter(isSpecFilename)
-  console.log('changed spec files\n%s', specFiles.join('\n'))
-
-  toPreviousBranch()
-
-  return {
-    allChangedFiles: parsedFiles,
-    specChangedFiles: specFiles
-  }
-}
-
-const parseChangedFiles = diffOutput => {
-  const toFilename = line => line.substr(2).trim()
-  const lines = diffOutput
-    .split('\n')
-    .filter(Boolean)
-    .map(toFilename)
-  return lines
-}
 
 const gitResetHard = () => shell.exec('git reset --hard', { silent: true })
 
+banner('Finding changed files')
 const { allChangedFiles, specChangedFiles } = findChangedFiles(
   currentBranch,
   againstBranch
 )
 
-const makeBranch = name =>
-  shell.exec(`git checkout -b ${name}`, { silent: true })
-
-const checkoutFiles = (branchName, filenames) => {
-  const cmd = `git checkout ${branchName} -- ${filenames.join(' ')}`
-  shell.exec(cmd)
-}
-
-const runTests = shouldFail => {
-  if (shouldFail) {
-    shell.config.fatal = false
-    const result = shell.exec('npm test')
-    if (result.code) {
-      console.log('✅ Great, the tests have failed as expected')
-      shell.config.fatal = true
-    } else {
-      throw new Error('Tests should have failed, but did not')
-    }
-  } else {
-    shell.exec('npm test')
-  }
-}
-
 const randomBranchName = `test-${Math.random()
   .toString()
   .substr(2, 10)}`
-console.log('was-tdd temp branch %s', randomBranchName)
+banner(`was-tdd temp branch ${randomBranchName}`)
 makeBranch(randomBranchName)
 
 checkoutFiles(currentBranch, specChangedFiles)
 gitStatus()
-runTests(true)
+banner('Running just tests - they should fail')
+runTests(currentBranch, againstBranch, true)
 
 checkoutFiles(currentBranch, allChangedFiles)
 gitStatus()
-runTests()
+banner('Running tests with changed code - should pass')
+runTests(currentBranch, againstBranch, false)
 
 gitResetHard()
-toPreviousBranch()
+toBranch(againstBranch)
 
 console.log('✅ there are failing tests')
 console.log('✅ new code fixes the failing tests')
-console.log('WAS TDD')
+banner('WAS TDD')

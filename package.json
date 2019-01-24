@@ -23,9 +23,14 @@
   "homepage": "https://github.com/bahmutov/was-tdd#readme",
   "dependencies": {
     "ggit": "2.4.11",
-    "shelljs": "0.8.3"
+    "shelljs": "0.8.3",
+    "terminal-banner": "1.1.0"
   },
   "bin": {
     "was-tdd": "bin/cli.js"
-  }
+  },
+  "files": [
+    "bin",
+    "src/*.js"
+  ]
 }
