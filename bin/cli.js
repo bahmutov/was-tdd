@@ -3,19 +3,8 @@
 // @ts-check
 
 const arg = require('arg')
-const {
-  findChangedFiles,
-  toBranch,
-  gitStatus,
-  makeBranch,
-  checkoutFiles,
-  runTests,
-  gitResetHard
-} = require('../src/utils')
-const banner = require('terminal-banner').terminalBanner
+const { wasTdd } = require('../src')
 const shell = require('shelljs')
-// exit with error on any error
-shell.config.fatal = true
 
 if (!shell.which('git')) {
   shell.echo('Sorry, this script requires git')
@@ -45,31 +34,4 @@ if (!againstBranch) {
   process.exit(1)
 }
 
-banner('Finding changed files')
-const { allChangedFiles, specChangedFiles } = findChangedFiles(
-  currentBranch,
-  againstBranch
-)
-
-const randomBranchName = `test-${Math.random()
-  .toString()
-  .substr(2, 10)}`
-banner(`was-tdd temp branch ${randomBranchName}`)
-makeBranch(randomBranchName)
-
-checkoutFiles(currentBranch, specChangedFiles)
-gitStatus()
-banner('Running just tests - they should fail')
-runTests(currentBranch, againstBranch, true)
-
-checkoutFiles(currentBranch, allChangedFiles)
-gitStatus()
-banner('Running tests with changed code - should pass')
-runTests(currentBranch, againstBranch, false)
-
-gitResetHard()
-toBranch(againstBranch)
-
-console.log('✅ there are failing tests')
-console.log('✅ new code fixes the failing tests')
-banner('WAS TDD')
+wasTdd({ currentBranch, againstBranch })

@@ -2,7 +2,7 @@
   "name": "was-tdd",
   "version": "1.0.0",
   "description": "Checks a branch that claims to fix a bug using TDD principle",
-  "main": "index.js",
+  "main": "src",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

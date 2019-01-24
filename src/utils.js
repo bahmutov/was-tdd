@@ -29,7 +29,7 @@ const findChangedFiles = (branch, againstBranch) => {
   const parsedFiles = parseChangedFiles(changedFilesExec)
   console.log('all changes files\n%s', parsedFiles.join('\n'))
 
-  // todo: use simpler minimatch
+  // todo: use simpler minimatch, probably pass from CLI
   const specFileRegex = /spec/
   const isSpecFilename = filename => specFileRegex.test(filename)
   const specFiles = parsedFiles.filter(isSpecFilename)
