@@ -70,6 +70,20 @@ const switchToTempBranchTask = (ctx, task) => {
   makeBranch(randomBranchName)
 }
 
+const runSpecsExpectFail = (ctx, task) => {
+  checkoutFiles(ctx.currentBranch, ctx.specChangedFiles)
+  // gitStatus()
+  // banner('Running just tests - they should fail')
+  return runTests(ctx.currentBranch, ctx.againstBranch, true)
+}
+
+const runSpecsExpectPass = (ctx, task) => {
+  checkoutFiles(ctx.currentBranch, ctx.allChangedFiles)
+  // gitStatus()
+  // banner('Running just tests - they should fail')
+  return runTests(ctx.currentBranch, ctx.againstBranch, false)
+}
+
 const wasTdd = ({ currentBranch, againstBranch }) => {
   const tasks = new Listr([
     {
@@ -79,6 +93,21 @@ const wasTdd = ({ currentBranch, againstBranch }) => {
     {
       title: 'Switch to temp branch',
       task: switchToTempBranchTask
+    },
+    {
+      title: 'Running just tests, expect to fail',
+      task: runSpecsExpectFail
+    },
+    // {
+    //   title: 'Checking out all code, expect tests to pass',
+    //   task: runSpecsExpectPass
+    // },
+    {
+      title: 'Code reset',
+      task: ctx => {
+        gitResetHard()
+        toBranch(ctx.againstBranch)
+      }
     }
   ])
 

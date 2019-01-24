@@ -4,10 +4,11 @@ const banner = require('terminal-banner').terminalBanner
 const shell = require('shelljs')
 // exit with error on any error
 shell.config.fatal = true
+const execa = require('execa')
 
 const gitStatus = () => shell.exec('git status')
-const toBranch = name => shell.exec(`git checkout ${name}`)
-const toPreviousBranch = () => shell.exec(`git checkout -`)
+const toBranch = name => shell.exec(`git checkout ${name}`, { silent: true })
+const toPreviousBranch = () => shell.exec(`git checkout -`, { silent: true })
 
 const parseChangedFiles = diffOutput => {
   const toFilename = line => line.substr(2).trim()
@@ -49,27 +50,36 @@ const makeBranch = name =>
 
 const checkoutFiles = (branchName, filenames) => {
   const cmd = `git checkout ${branchName} -- ${filenames.join(' ')}`
-  shell.exec(cmd)
+  shell.exec(cmd, { silent: true })
 }
 
 const runTests = (fromBranch, againstBranch, shouldFail) => {
   if (shouldFail) {
-    shell.config.fatal = false
-    const result = shell.exec('npm test')
-    if (result.code) {
-      console.log('✅ Great, the tests have failed as expected')
-      shell.config.fatal = true
-    } else {
-      // TODO return Result
-      toBranch(againstBranch)
-      banner(
-        `🔥 Tests from ${fromBranch} should have failed, but did not. Was NOT TDD 🔥`
-      )
-      process.exit(1)
-    }
-  } else {
-    shell.exec('npm test')
+    // shell.config.fatal = false
+    // const result = shell.exec('npm test')
+    return execa('npm', ['test'], {}).then(
+      result => {
+        toBranch(againstBranch)
+        // banner(
+        throw new Error(`🔥 Tests from ${fromBranch} should have failed`)
+      },
+      () => {
+        // console.log('✅ Great, the tests have failed as expected')
+      }
+    )
+    //   // if (result.code) {
+    //     shell.config.fatal = true
+    //   } else {
+    //     // TODO return Result
+    //     // process.exit(1)
+    //   }
+    // })
   }
+
+  // else {
+  // shell.exec('npm test')
+  return execa('npm', ['test'])
+  // }
 }
 
 const gitResetHard = () => shell.exec('git reset --hard', { silent: true })

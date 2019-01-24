@@ -25,6 +25,7 @@
   "homepage": "https://github.com/bahmutov/was-tdd#readme",
   "dependencies": {
     "arg": "4.1.0",
+    "execa": "1.0.0",
     "ggit": "2.4.11",
     "listr": "0.14.3",
     "pluralize": "7.0.0",

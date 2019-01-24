@@ -35,6 +35,6 @@ if (!againstBranch) {
 }
 
 wasTdd({ currentBranch, againstBranch }).catch(err => {
-  console.error(err.message)
+  console.error('🔥 Was NOT TDD')
   process.exit(1)
 })
