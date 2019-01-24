@@ -1,6 +1,5 @@
 // @ts-check
 
-const banner = require('terminal-banner').terminalBanner
 const shell = require('shelljs')
 // exit with error on any error
 shell.config.fatal = true
@@ -20,8 +19,6 @@ const parseChangedFiles = diffOutput => {
 }
 
 const findChangedFiles = (branch, againstBranch) => {
-  // toBranch(branch)
-
   const cmd = `git diff --name-status --diff-filter=ACMD ${branch}..${againstBranch}`
   const changedFilesExec = shell.exec(cmd, { silent: true }).stdout
 
@@ -36,8 +33,6 @@ const findChangedFiles = (branch, againstBranch) => {
   const isSpecFilename = filename => specFileRegex.test(filename)
   const specFiles = parsedFiles.filter(isSpecFilename)
   // console.log('changed spec files\n%s', specFiles.join('\n'))
-
-  // toPreviousBranch()
 
   return {
     allChangedFiles: parsedFiles,
@@ -55,31 +50,18 @@ const checkoutFiles = (branchName, filenames) => {
 
 const runTests = (fromBranch, againstBranch, shouldFail) => {
   if (shouldFail) {
-    // shell.config.fatal = false
-    // const result = shell.exec('npm test')
     return execa('npm', ['test'], {}).then(
       result => {
         toBranch(againstBranch)
-        // banner(
         throw new Error(`🔥 Tests from ${fromBranch} should have failed`)
       },
       () => {
-        // console.log('✅ Great, the tests have failed as expected')
+        // Great, the tests have failed as expected
       }
     )
-    //   // if (result.code) {
-    //     shell.config.fatal = true
-    //   } else {
-    //     // TODO return Result
-    //     // process.exit(1)
-    //   }
-    // })
   }
 
-  // else {
-  // shell.exec('npm test')
   return execa('npm', ['test'])
-  // }
 }
 
 const gitResetHard = () => shell.exec('git reset --hard', { silent: true })
