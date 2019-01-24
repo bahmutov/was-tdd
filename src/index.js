@@ -48,10 +48,10 @@ const wasTdd1 = ({ currentBranch, againstBranch }) => {
   banner('WAS TDD')
 }
 
-const findChangedFilesTask = (currentBranch, againstBranch) => (ctx, task) => {
+const findChangedFilesTask = (ctx, task) => {
   const { allChangedFiles, specChangedFiles } = findChangedFiles(
-    currentBranch,
-    againstBranch
+    ctx.currentBranch,
+    ctx.againstBranch
   )
   ctx.allChangedFiles = allChangedFiles
   ctx.specChangedFiles = specChangedFiles
@@ -62,15 +62,27 @@ const findChangedFilesTask = (currentBranch, againstBranch) => (ctx, task) => {
   )} among ${pluralize('changed file', allChangedFiles.length, true)}`
 }
 
+const switchToTempBranchTask = (ctx, task) => {
+  const randomBranchName = `test-${Math.random()
+    .toString()
+    .substr(2, 10)}`
+  task.title = `was-tdd temp branch ${randomBranchName}`
+  makeBranch(randomBranchName)
+}
+
 const wasTdd = ({ currentBranch, againstBranch }) => {
   const tasks = new Listr([
     {
       title: 'Finding changed files',
-      task: findChangedFilesTask(currentBranch, againstBranch)
+      task: findChangedFilesTask
+    },
+    {
+      title: 'Switch to temp branch',
+      task: switchToTempBranchTask
     }
   ])
 
-  return tasks.run()
+  return tasks.run({ currentBranch, againstBranch })
 }
 
 module.exports = { wasTdd }
