@@ -4,7 +4,7 @@
   "description": "Checks a branch that claims to fix a bug using TDD principle",
   "main": "src",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "echo \"warning: write tests!\"",
     "semantic-release": "semantic-release",
     "travis-deploy-once": "travis-deploy-once"
   },
