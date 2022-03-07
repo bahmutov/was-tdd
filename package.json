@@ -28,7 +28,7 @@
     "execa": "1.0.0",
     "listr": "0.14.3",
     "pluralize": "7.0.0",
-    "shelljs": "0.8.3"
+    "shelljs": "0.8.5"
   },
   "bin": {
     "was-tdd": "bin/cli.js"
